@@ -12,7 +12,7 @@ describe("major scenarios", () => {
     expect(setHandle).toBeInstanceOf(IntensitySegments);
   });
 
-  test.only("should add segments and print serialized output properly", () => {
+  test("should add segments and print serialized output properly", () => {
     const segments = new IntensitySegments();
 
     expect(segments.toString()).toEqual('"[]"');
@@ -27,7 +27,7 @@ describe("major scenarios", () => {
     expect(segments.toString()).toEqual('"[[10,-1],[20,0],[30,-1],[40,0]]"');
   });
 
-  test("should correctly remove the segments breakpoints whose intensity is 0 and print serialized output properly", () => {
+  test.only("should correctly remove the segments breakpoints whose intensity is 0 and print serialized output properly", () => {
     const segments = new IntensitySegments();
 
     segments.add(10, 30, 1);

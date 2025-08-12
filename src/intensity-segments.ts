@@ -1,4 +1,4 @@
-import { TBreakpoint, TIntensity } from "./types";
+import { TBreakpoint, TIntensity, TSegment } from "./types";
 
 export class IntensitySegments {
   segments: Map<TBreakpoint, TIntensity>;
@@ -50,10 +50,22 @@ export class IntensitySegments {
   toString(): string {
     let currentIntensity = 0;
     let result: string = "";
+
+    // generate new map sorted by breakpoints
     const mapArray = Array.from(this.segments);
     mapArray.sort(([breakpointA], [breakpointB]) => breakpointA - breakpointB);
-    const sortedByBreakpointSegments = new Map(mapArray);
-    for (let segment of sortedByBreakpointSegments) {
+
+    // remove segments whose intensities are 0
+    const non0IntensityArray: TSegment[] = [];
+    mapArray.forEach(([breakpoint, intensity], index) => {
+      if (intensity !== 0) {
+        non0IntensityArray.push([breakpoint, intensity]);
+      }
+    });
+
+    const SegmentsSortedByBreakpoints = new Map(non0IntensityArray);
+
+    for (let segment of SegmentsSortedByBreakpoints) {
       const [breakpoint, intensity] = segment;
       console.log("breakpoint", breakpoint);
       console.log("intensity", intensity);
