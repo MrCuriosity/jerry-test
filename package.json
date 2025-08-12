@@ -1,0 +1,20 @@
+{
+  "name": "jerry-test-nathan_wang",
+  "version": "1.0.0",
+  "description": "intensity-segments-test",
+  "homepage": "https://github.com/MrCuriosity/jerry-test#readme",
+  "bugs": {
+    "url": "https://github.com/MrCuriosity/jerry-test/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/MrCuriosity/jerry-test.git"
+  },
+  "license": "ISC",
+  "author": "Nathan",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  }
+}
