@@ -58,7 +58,7 @@ describe("major scenarios", () => {
 });
 
 describe("sperical cases", () => {
-  test.skip("should merge segments whose intensities are euqal and print serialized output properly", () => {
+  test("should merge segments whose intensities are euqal and print serialized output properly", () => {
     const segments = new IntensitySegments();
 
     segments.add(10, 30, 1);

@@ -6,17 +6,16 @@ export class IntensitySegments {
   constructor() {
     this.segments = new Map();
   }
+
   add(
     from: TBreakpoint,
     to: TBreakpoint,
     amount: TIntensity
   ): InstanceType<typeof IntensitySegments> {
     const segments = this.segments;
-    console.log("add before segments", segments);
     // insert
     segments.set(from, (segments.get(from) || 0) + amount);
     segments.set(to, (segments.get(to) || 0) - amount);
-    console.log("add after segments", segments);
 
     return this;
   }
@@ -27,11 +26,8 @@ export class IntensitySegments {
     amount: TIntensity
   ): InstanceType<typeof IntensitySegments> {
     const segments = this.segments;
-    console.log("set before segments", segments);
     const iterator = segments.entries();
-    console.log("iterator", iterator);
     let currentSegment = iterator.next();
-    console.log("currentSegment", currentSegment);
 
     // remove those segments between from and to
     while (!currentSegment.done) {
@@ -43,7 +39,7 @@ export class IntensitySegments {
     }
     segments.set(from, amount);
     segments.set(to, -amount);
-    console.log("set after segments", segments);
+
     return this;
   }
 
@@ -51,7 +47,7 @@ export class IntensitySegments {
     let currentIntensity = 0;
     let result: string = "";
 
-    // generate new map sorted by breakpoints
+    // generate new map sorted by breakpoints, in case that the Map order is just the `INSERT` order
     const mapArray = Array.from(this.segments);
     mapArray.sort(([breakpointA], [breakpointB]) => breakpointA - breakpointB);
 
@@ -60,39 +56,25 @@ export class IntensitySegments {
 
     for (let i = 0; i < mapArray.length; i++) {
       const [breakpoint, intensity] = mapArray[i];
-      console.log("breakpoint", breakpoint);
-      console.log("intensity", intensity);
-      console.log("currentIntensity", currentIntensity);
       currentIntensity += intensity;
-      console.log("currentIntensity", currentIntensity);
-      console.log("");
       accumuteIntensityArray.push([breakpoint, currentIntensity]);
     }
-    console.log("accumuteIntensityArray", accumuteIntensityArray);
 
-    // purge segments whose intensities are 0 except for the tail
-    const nonZeroIntensityArray: TSegment[] = [];
-
-    for (let i = accumuteIntensityArray.length - 1; i > -1; i--) {
-      const [breakpoint, intensity] = accumuteIntensityArray[i];
+    for (let i = 0; i < accumuteIntensityArray.length; i++) {
+      // purge leading zero intensity segment
       if (i === 0) {
+        const [breakpoint, intensity] = accumuteIntensityArray[i];
         if (intensity !== 0) {
-          nonZeroIntensityArray.push([breakpoint, intensity]);
+          result += `[${breakpoint},${intensity}],`;
         }
+        // merge segment into previous one if their intensity are equal
       } else {
-        const [nextBreakpoint, previousIntensity] = accumuteIntensityArray[i - 1];
-        if (!(intensity === 0 && previousIntensity === 0)) {
-          nonZeroIntensityArray.push([breakpoint, intensity]);
+        const [breakpoint, intensity] = accumuteIntensityArray[i];
+        const [previousBreakpoint, previousIntensity] = accumuteIntensityArray[i - 1];
+        if (intensity !== previousIntensity) {
+          result += `[${breakpoint},${intensity}],`;
         }
       }
-    }
-
-    nonZeroIntensityArray.reverse();
-
-    // structure string on-demand
-    for (let segment of nonZeroIntensityArray) {
-      const [breakpoint, intensity] = segment;
-      result += `[${breakpoint},${intensity}],`;
     }
 
     if (result === "") {
@@ -100,7 +82,7 @@ export class IntensitySegments {
     } else {
       result = `"[${result.substring(0, result.length - 1)}]"`;
     }
-    console.log("result", result);
+
     return result;
   }
 }
