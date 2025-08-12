@@ -5,6 +5,7 @@ const config = {
     "^.+\\.jsx?$": "babel-jest",
   },
   testEnvironment: "node",
+  preset: "ts-jest",
 };
 
 export default config;

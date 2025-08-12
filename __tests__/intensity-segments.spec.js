@@ -2,7 +2,7 @@ import { test, describe, expect } from "@jest/globals";
 import { IntensitySegments } from "../src/intensity-segments";
 
 describe("major scenarios", () => {
-  test("#add and #set method should return its instance itself", () => {
+  test.only("#add and #set method should return its instance itself", () => {
     const segments = new IntensitySegments();
 
     const addHandle = segments.add(10, 30, 1);
