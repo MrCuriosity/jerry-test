@@ -42,7 +42,7 @@ export class IntensitySegments {
       currentSegment = iterator.next();
     }
     segments.set(from, amount);
-    segments.set(to, 0);
+    segments.set(to, -amount);
     console.log("set after segments", segments);
     return this;
   }
@@ -55,25 +55,44 @@ export class IntensitySegments {
     const mapArray = Array.from(this.segments);
     mapArray.sort(([breakpointA], [breakpointB]) => breakpointA - breakpointB);
 
-    // remove segments whose intensities are 0
-    const non0IntensityArray: TSegment[] = [];
-    mapArray.forEach(([breakpoint, intensity], index) => {
-      if (intensity !== 0) {
-        non0IntensityArray.push([breakpoint, intensity]);
-      }
-    });
+    // accumulate intensity
+    const accumuteIntensityArray: TSegment[] = [];
 
-    const SegmentsSortedByBreakpoints = new Map(non0IntensityArray);
-
-    for (let segment of SegmentsSortedByBreakpoints) {
-      const [breakpoint, intensity] = segment;
+    for (let i = 0; i < mapArray.length; i++) {
+      const [breakpoint, intensity] = mapArray[i];
       console.log("breakpoint", breakpoint);
       console.log("intensity", intensity);
       console.log("currentIntensity", currentIntensity);
       currentIntensity += intensity;
       console.log("currentIntensity", currentIntensity);
       console.log("");
-      result += `[${breakpoint},${currentIntensity}],`;
+      accumuteIntensityArray.push([breakpoint, currentIntensity]);
+    }
+    console.log("accumuteIntensityArray", accumuteIntensityArray);
+
+    // purge segments whose intensities are 0 except for the tail
+    const nonZeroIntensityArray: TSegment[] = [];
+
+    for (let i = accumuteIntensityArray.length - 1; i > -1; i--) {
+      const [breakpoint, intensity] = accumuteIntensityArray[i];
+      if (i === 0) {
+        if (intensity !== 0) {
+          nonZeroIntensityArray.push([breakpoint, intensity]);
+        }
+      } else {
+        const [nextBreakpoint, previousIntensity] = accumuteIntensityArray[i - 1];
+        if (!(intensity === 0 && previousIntensity === 0)) {
+          nonZeroIntensityArray.push([breakpoint, intensity]);
+        }
+      }
+    }
+
+    nonZeroIntensityArray.reverse();
+
+    // structure string on-demand
+    for (let segment of nonZeroIntensityArray) {
+      const [breakpoint, intensity] = segment;
+      result += `[${breakpoint},${intensity}],`;
     }
 
     if (result === "") {

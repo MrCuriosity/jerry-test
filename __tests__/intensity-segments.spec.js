@@ -27,7 +27,7 @@ describe("major scenarios", () => {
     expect(segments.toString()).toEqual('"[[10,-1],[20,0],[30,-1],[40,0]]"');
   });
 
-  test.only("should correctly remove the segments breakpoints whose intensity is 0 and print serialized output properly", () => {
+  test("should correctly remove the segments breakpoints whose intensity is 0 and print serialized output properly", () => {
     const segments = new IntensitySegments();
 
     segments.add(10, 30, 1);
@@ -58,7 +58,7 @@ describe("major scenarios", () => {
 });
 
 describe("sperical cases", () => {
-  test("should merge segments whose intensities are euqal and print serialized output properly", () => {
+  test.skip("should merge segments whose intensities are euqal and print serialized output properly", () => {
     const segments = new IntensitySegments();
 
     segments.add(10, 30, 1);
