@@ -50,10 +50,18 @@ export class IntensitySegments {
   toString(): string {
     let currentIntensity = 0;
     let result: string = "";
-    for (let segment of this.segments) {
+    const mapArray = Array.from(this.segments);
+    mapArray.sort(([breakpointA], [breakpointB]) => breakpointA - breakpointB);
+    const sortedByBreakpointSegments = new Map(mapArray);
+    for (let segment of sortedByBreakpointSegments) {
       const [breakpoint, intensity] = segment;
+      console.log("breakpoint", breakpoint);
+      console.log("intensity", intensity);
+      console.log("currentIntensity", currentIntensity);
       currentIntensity += intensity;
-      result += `[${breakpoint},${intensity}],`;
+      console.log("currentIntensity", currentIntensity);
+      console.log("");
+      result += `[${breakpoint},${currentIntensity}],`;
     }
 
     if (result === "") {

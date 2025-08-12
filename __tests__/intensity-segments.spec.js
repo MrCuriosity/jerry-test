@@ -2,7 +2,7 @@ import { test, describe, expect } from "@jest/globals";
 import { IntensitySegments } from "../src/intensity-segments";
 
 describe("major scenarios", () => {
-  test.only("#add and #set method should return its instance itself", () => {
+  test("#add and #set method should return its instance itself", () => {
     const segments = new IntensitySegments();
 
     const addHandle = segments.add(10, 30, 1);
@@ -12,7 +12,7 @@ describe("major scenarios", () => {
     expect(setHandle).toBeInstanceOf(IntensitySegments);
   });
 
-  test("should add segments and print serialized output properly", () => {
+  test.only("should add segments and print serialized output properly", () => {
     const segments = new IntensitySegments();
 
     expect(segments.toString()).toEqual('"[]"');
